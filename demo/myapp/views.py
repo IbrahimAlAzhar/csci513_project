@@ -7,6 +7,8 @@ from .models import TodoItem, Part
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Part
+from django.utils import timezone
+
 # from .models import User
 
 # def list_parts(request):
@@ -44,22 +46,15 @@ from .serializers import PartSerializer
 
 from django.http import JsonResponse
 from .models import Part
+from datetime import datetime
 
 def part_detail(request):
-    number = 33  # Hard-code the number here
-    try:
-        part = Part.objects.get(number=number)
-        data = {
-            'number': part.number,
-            'description': part.description,
-            'price': float(part.price),  # Convert Decimal to float for JSON serialization
-            'weight': float(part.weight),
-            'picture_url': part.picture_url
-        }
-        return JsonResponse(data)
-    except Part.DoesNotExist:
-        return JsonResponse({'error': 'Part not found'}, status=404)
-
+    part = Part.objects.get(number=33)  # Fetch the part with number = 33
+    current_time = timezone.now()  # Get the current date and time
+    return render(request, 'part_detail.html', {
+        'part': part,
+        'current_time': current_time  # Pass the current time to the template
+    })
 
 # def part_detail(request, number):
 #     try:
